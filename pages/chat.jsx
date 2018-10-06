@@ -3,9 +3,12 @@ import Link from "next/link";
 import { Input } from "antd";
 import { Button } from "antd";
 const { TextArea } = Input;
+import { Modal } from 'antd';
+import instance from '../server/chat';
 
 const { Header, Content, Footer, Sider } = Layout;
 const SubMenu = Menu.SubMenu;
+
 
 // Dummy data for messages
 const DUMMY_DATA = [
@@ -23,11 +26,22 @@ class Chat extends React.Component {
   constructor(props) {
     super();
     this.state = {
+      value: '',
       collapsed: false,
       visible: false,
-      messages: DUMMY_DATA
+      messages: DUMMY_DATA,
+      modalVisible: false,
+      bountySetValue:[],
     };
+    
+    this.setModalVisible = this.setModalVisible.bind(this);
+    // this.calling = this.calling.bind(this);
   }
+
+  setModalVisible(modalVisible) {
+      this.setState({ modalVisible:true });
+      
+    }
 
   showDrawer = () => {
     this.setState({
@@ -46,9 +60,26 @@ class Chat extends React.Component {
     this.setState({ collapsed });
   };
 
+  componentDidMount()
+  {
+   async function calling() {
+     console.log("2wlehwkufhdkdsahf")
+     await instance.bounty.call((err, res) => {
+       if (err) {
+         console.log(err);
+       } else {
+         console.log(res);
+       }
+     })
+   }
+  }
+  
+ 
   render() {
+     
     return (
       <Layout style={{ minHeight: "100vh" }}>
+        {this.calling}
         <Sider
           collapsible
           collapsed={this.state.collapsed}
@@ -171,10 +202,20 @@ class Chat extends React.Component {
           onClose={this.onClose}
           visible={this.state.visible}
         >
-          <p type="primary">Set Price</p>
+          <p type="primary" onClick={() => this.setModalVisible(true)}>Set Bounty</p>
           <p type="primary">Set Messaging limit</p>
           <p type="primary">Control Privacy</p>
         </Drawer>
+        
+        <Modal
+          title="Set Bounty"
+          style={{ top: 20 }}
+          visible={this.state.modalVisible}
+          onOk={() => this.setModalVisible(false)}
+          onCancel={() => this.setModalVisible(false)}
+        >
+          Your Current Bounty is {JSON.stringify(this.state.bountySetValue)}
+        </Modal>
       </Layout>
     );
   }
