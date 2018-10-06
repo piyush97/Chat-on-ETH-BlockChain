@@ -13,7 +13,8 @@
     "firebase": "^5.5.3",
     "next": "^7.0.1",
     "react": "^16.5.2",
-    "react-dom": "^16.5.2"
+    "react-dom": "^16.5.2",
+    "web3": "^1.0.0-beta.26"
   },
   "license": "ISC",
   "devDependencies": {
