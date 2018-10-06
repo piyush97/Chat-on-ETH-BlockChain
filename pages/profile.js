@@ -35,14 +35,25 @@ class Profile extends Component {
           >
             <h1 style={{ textAlign: "center" }}>Aditya Gupta</h1>
             <h2 style={{ textAlign: "center" }}>Bounty setter?</h2>
+            <Col
+            xs={6}
+            lg={6}
+            style={{ paddingTop: "20px" }}>
             <Checkbox onChange={this.onChange}>Checkbox</Checkbox>
+            </Col>
             {this.state.BountySetter && (
-              <Slider
-                min={1}
-                max={20}
-                onChange={this.onChange}
-                value={typeof inputValue === "number" ? inputValue : 0}
-              />
+              <Col
+            xs={6}
+            lg={6}
+            style={{ paddingTop: "20px" }}
+          >
+                <Slider
+                  min={1}
+                  max={20}
+                  onChange={this.onChange}
+                  value={typeof inputValue === "number" ? inputValue : 0}
+                />
+              </Col>
             )}
           </Col>
         </Row>
