@@ -51,7 +51,7 @@ class Chat extends React.Component {
               title={<span><Icon type="user" /><span>User</span></span>}
             >
               <Menu.Item key="1">Piyush</Menu.Item>
-              <Menu.Item key="2">Aditya</Menu.Item>
+             <Menu.Item key="2"> <Link href='/profile'><div>Aditya</div></Link></Menu.Item>
               <Menu.Item key="3">Hemant</Menu.Item>
             </SubMenu>
             <SubMenu
