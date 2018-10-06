@@ -2,6 +2,7 @@ import { Drawer, Layout, Menu, Breadcrumb, Icon, Row, Col} from 'antd';
 import Link from 'next/link'
 import { Input } from 'antd';
 import { Button } from 'antd';
+import { database } from 'firebase';
 
 const { TextArea } = Input;
 
@@ -9,10 +10,14 @@ const { Header, Content, Footer, Sider } = Layout;
 const SubMenu = Menu.SubMenu;
 
 class Chat extends React.Component {
-  state = {
-    collapsed: false,
-    visible: false
-  };
+  constructor(props) {
+    super();
+    this.state = {
+      collapsed: false,
+      visible: false,
+      messages: [],
+    };
+  }
 
   showDrawer = () => {
     this.setState({
