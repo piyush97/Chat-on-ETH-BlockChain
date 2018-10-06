@@ -10,6 +10,7 @@
     "@zeit/next-css": "^1.0.1",
     "antd": "^3.9.2",
     "babel-plugin-import": "^1.9.1",
+    "firebase": "^5.5.3",
     "next": "^7.0.1",
     "react": "^16.5.2",
     "react-dom": "^16.5.2"
