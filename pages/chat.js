@@ -91,7 +91,7 @@ class Chat extends React.Component {
               <span>File</span>
             </Menu.Item>
             <Menu.Item key="10" onClick={this.showDrawer}>
-              <Icon type="file" />
+              <Icon type="setting" theme="outlined" />
               <span>Settings</span>
             </Menu.Item>
             <Menu.Item key="11">
@@ -108,8 +108,6 @@ class Chat extends React.Component {
           <Header style={{ background: "#fff", padding: 0 }} />
           <Content style={{ margin: "0 16px" }}>
             <Breadcrumb style={{ margin: "16px 0" }}>
-              <Breadcrumb.Item>User</Breadcrumb.Item>
-              <Breadcrumb.Item>Hemant</Breadcrumb.Item>
             </Breadcrumb>
             <ul className="message-list">
               {this.state.messages.map(message => {
