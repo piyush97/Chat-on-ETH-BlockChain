@@ -60,6 +60,13 @@ class Chat extends React.Component {
       });
     } else {
       //TODO pay bounty and refresh state
+      
+      instance.methods.depositFunds({
+        from: web3.eth.accounts[0],
+        gas: 3000000,
+        value: 100
+      }, function (err, res) {}).call();
+
     }
     this.syncMessages();
   }

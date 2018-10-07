@@ -26,19 +26,19 @@ class Signup extends Component {
           </Col>
           <Col xs={{ span: 12, offset: 6 }} lg={{ span: 12, offset: 6 }}>
             <Input placeholder="enter you name" type="text" />
-            <div class="spacer" style={{ height: 15 }} />
+            <div className="spacer" style={{ height: 15 }} />
           </Col>
           <Col xs={{ span: 12, offset: 6 }} lg={{ span: 12, offset: 6 }}>
             <Input placeholder="enter email" type="email" />
           </Col>
         </Row>
-        <div class="spacer" style={{ height: 15 }} />
+        <div className="spacer" style={{ height: 15 }} />
         <Row>
           <Col xs={{ span: 12, offset: 6 }} lg={{ span: 12, offset: 6 }}>
             <Input placeholder="enter password" type="password" />
           </Col>
         </Row>
-        <div class="spacer" style={{ height: 15 }} />
+        <div className="spacer" style={{ height: 15 }} />
         <Row>
           <Col xs={{ span: 12, offset: 6 }} lg={{ span: 12, offset: 6 }}>
             <Input placeholder="Confirm password" type="password" />
@@ -52,7 +52,7 @@ class Signup extends Component {
             </Link>
           </Col>
           <Col xs={{ span: 12, offset: 6 }} lg={{ span: 12, offset: 6 }}>
-            <div class="spacer" style={{ height: 15 }} />
+            <div className="spacer" style={{ height: 15 }} />
             <Button
               type="primary"
               loading={this.state.loading}

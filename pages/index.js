@@ -33,7 +33,7 @@ class Index extends Component {
             <Input placeholder="enter email" type="email" />
           </Col>
         </Row>
-        <div class="spacer" style={{ height: 15 }} />
+        <div className="spacer" style={{ height: 15 }} />
         <Row>
           <Col xs={{ span: 12, offset: 6 }} lg={{ span: 12, offset: 6 }}>
             <Input placeholder="enter password" type="password" />
@@ -47,7 +47,7 @@ class Index extends Component {
             </Link>
           </Col>
           <Col xs={{ span: 12, offset: 6 }} lg={{ span: 12, offset: 6 }}>
-            <div class="spacer" style={{ height: 15 }} />
+            <div className="spacer" style={{ height: 15 }} />
             <Link href="/chat">
               <Button
                 type="primary"
