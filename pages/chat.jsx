@@ -3,12 +3,12 @@ import Link from "next/link";
 import { Input } from "antd";
 import { Button } from "antd";
 const { TextArea } = Input;
-import { Modal } from 'antd';
-import instance from '../server/chat';
+import { Modal } from "antd";
+import instance from "../server/chat";
+import web3 from "../server/web3";
 
 const { Header, Content, Footer, Sider } = Layout;
 const SubMenu = Menu.SubMenu;
-
 
 // Dummy data for messages
 const DUMMY_DATA = [
@@ -26,22 +26,46 @@ class Chat extends React.Component {
   constructor(props) {
     super();
     this.state = {
-      value: '',
+      value: "",
       collapsed: false,
       visible: false,
       messages: DUMMY_DATA,
       modalVisible: false,
-      bountySetValue:[],
+      bountySetValue: [],
+      ManagerName: "",
+      BountyPaid: true,
+      MessageArray: [],
+      StateAccounts: [],
+      messageToSend: ""
     };
-    
+    this.messageSender = this.messageSender.bind(this);
     this.setModalVisible = this.setModalVisible.bind(this);
+    this.syncMessages = this.syncMessages.bind(this);
     // this.calling = this.calling.bind(this);
   }
+  messageSender(event) {
+    //event.target.value;
+    if (this.state.BountyPaid == true) {
+      var localAccount = web3.eth.accounts[0];
+      console.log(this.state.StateAccounts[0]);
+      let msg;
+      if (this.state.StateAccounts[0] == this.state.ManagerName) {
+        var msg = "0" + this.state.messageToSend;
+      } else {
+        var msg = "1" + this.state.messageToSend;
+      }
 
-  setModalVisible(modalVisible) {
-      this.setState({ modalVisible:true });
-      
+      instance.methods.sendMessage(msg).send({
+        from: this.state.StateAccounts[0]
+      });
+    } else {
+      //TODO pay bounty and refresh state
     }
+    this.syncMessages();
+  }
+  setModalVisible(modalVisible) {
+    this.setState({ modalVisible: true });
+  }
 
   showDrawer = () => {
     this.setState({
@@ -60,26 +84,89 @@ class Chat extends React.Component {
     this.setState({ collapsed });
   };
 
-  componentDidMount()
-  {
-   async function calling() {
-     console.log("2wlehwkufhdkdsahf")
-     await instance.bounty.call((err, res) => {
-       if (err) {
-         console.log(err);
-       } else {
-         console.log(res);
-       }
-     })
-   }
+  async stateSync() {
+    await instance.methods.bounty().call((error, response) => {
+      if (error) {
+        console.log("error", error);
+      } else {
+        // console.log('response',response);
+        this.setState({
+          bountySetValue: web3.utils.fromWei(response, "ether")
+        });
+      }
+    });
+    const accounts = await web3.eth.getAccounts();
+    this.setState({ StateAccounts: accounts });
+    await instance.methods.manager().call((error, response) => {
+      if (error) {
+        console.log("managererror", error);
+      } else {
+        console.log("managerresponse", response);
+        this.setState({
+          ManagerName: response
+        });
+      }
+    });
+
+    await instance.methods.bountyPaid().call((error, response) => {
+      if (error) {
+        console.log("BountyPaiderror", error);
+      } else {
+        console.log("BountyPaidresponse", response);
+        this.setState({
+          BountyPaid: response
+        });
+      }
+    });
+    await instance.methods.getMessages().call((error, response) => {
+      if (error) {
+        console.log("GetMessagesPaiderror", error);
+      } else {
+        console.log("getMessagesResponse", response);
+        this.setState({
+          MessageArray: response
+        });
+      }
+    });
+    console.log("MessageArray", this.state.MessageArray);
   }
-  
- 
+
+  async syncMessages() {
+    await instance.methods.getMessages().call((error, response) => {
+      if (error) {
+        console.log("GetMessagesPaiderror", error);
+      } else {
+        console.log("getMessagesResponse", response);
+        this.setState({
+          MessageArray: response
+        });
+      }
+    });
+  }
+  async componentDidMount() {
+    //  console.log("2wlehwkufhdkdsahf");
+    //  console.log("%%%%%",instance);
+    //  console.log(instance.options.address);
+
+    //  bountyPaid
+
+    this.stateSync();
+
+    // await instance.newMessage().watch((error, response) => {
+    //   if (!error) {
+    //     this.stateSync();
+    //   }
+    // });
+
+    await instance.events.newMessage({}, (error, data) => {
+      if (error) console.log("Error: " + error);
+      else console.log("Log data: " + data);
+    });
+  }
+
   render() {
-     
     return (
       <Layout style={{ minHeight: "100vh" }}>
-        {this.calling}
         <Sider
           collapsible
           collapsed={this.state.collapsed}
@@ -138,55 +225,67 @@ class Chat extends React.Component {
         <Layout>
           <Header style={{ background: "#fff", padding: 0 }} />
           <Content style={{ margin: "0 16px" }}>
-            <Breadcrumb style={{ margin: "16px 0" }}>
-            </Breadcrumb>
-            <ul className="message-list">
-              {this.state.messages.map(message => {
-                if (message.senderId === "perborgen")
+            <Breadcrumb style={{ margin: "16px 0" }} />
+            <ul className="message-list" />
+            {this.state.MessageArray.map(function(message, index) {
+              if (message.indexOf("1")) {
+                return (
+                  <div>
+                    <div
+                      style={{
+                        borderRadius: 50,
+                        padding: 24,
+                        color: "#fff",
+                        background: "#438EF7",
+                        minHeight: 60,
+                        textAlign: "left"
+                      }}
+                      key={index}
+                    >
+                      <b>Hemant:</b> {message.slice(1, message.length)}
+                    </div>
+                    <br />
+                  </div>
+                );
+              } else {
+                {
                   return (
                     <div>
                       <div
-                        key={message.id}
                         style={{
+                          borderRadius: 50,
                           padding: 24,
                           background: "#fff",
                           minHeight: 60,
                           textAlign: "right"
                         }}
+                        key={index}
                       >
-                        <b>{message.senderId}:</b>
-                        {message.text}
+                        <b>Aditya:</b> {message.slice(1, message.length)}
                       </div>
                       <br />
                     </div>
                   );
-                else
-                  return (
-                    <div>
-                      <div
-                        key={message.id}
-                        style={{
-                          padding: 24,
-                          background: "#fff",
-                          minHeight: 60,
-                          textAlign: "left"
-                        }}
-                      >
-                        <b>{message.senderId}:</b>
-                        {message.text}
-                      </div>
-                      <br />
-                    </div>
-                  );
-              })}
-            </ul>
+                }
+              }
+            })}
           </Content>
           <Row>
             <Col xs={{ span: 18 }} lg={{ span: 23 }}>
-              <TextArea rows={4} />
+              <TextArea
+                type="text"
+                onChange={event =>
+                  this.setState({ messageToSend: event.target.value })
+                }
+                rows={4}
+              />
             </Col>
             <Col xs={{ span: 2 }} lg={{ span: 1 }}>
-              <Button type="primary" style={{ height: 95 }}>
+              <Button
+                onClick={this.messageSender}
+                type="primary"
+                style={{ height: 95 }}
+              >
                 Send
               </Button>
             </Col>
@@ -202,11 +301,13 @@ class Chat extends React.Component {
           onClose={this.onClose}
           visible={this.state.visible}
         >
-          <p type="primary" onClick={() => this.setModalVisible(true)}>Set Bounty</p>
+          <p type="primary" onClick={() => this.setModalVisible(true)}>
+            Set Bounty
+          </p>
           <p type="primary">Set Messaging limit</p>
           <p type="primary">Control Privacy</p>
         </Drawer>
-        
+
         <Modal
           title="Set Bounty"
           style={{ top: 20 }}
@@ -214,7 +315,7 @@ class Chat extends React.Component {
           onOk={() => this.setModalVisible(false)}
           onCancel={() => this.setModalVisible(false)}
         >
-          Your Current Bounty is {JSON.stringify(this.state.bountySetValue)}
+          Your Current Bounty is {this.state.bountySetValue} Either
         </Modal>
       </Layout>
     );
