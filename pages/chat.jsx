@@ -231,38 +231,46 @@ class Chat extends React.Component {
               if (message.indexOf("1")) {
                 return (
                   <div>
+                  <Row>
+                      <Col xs={{ span: 18 }} lg={{ span: 4 }}>
                     <div
                       style={{
                         borderRadius: 50,
-                        padding: 24,
+                        padding: 14,
                         color: "#fff",
                         background: "#438EF7",
-                        minHeight: 60,
+                        minHeight: 30,
                         textAlign: "left"
                       }}
                       key={index}
                     >
-                      <b>Hemant:</b> {message.slice(1, message.length)}
+                      <b style={{fontSize:12, color:'#041527'}}>Hemant <br/></b> {message.slice(1, message.length)}
                     </div>
-                    <br />
+                    </Col>
+                    </Row>
+                    <br/>
                   </div>
                 );
               } else {
                 {
                   return (
                     <div>
+                     <Row>
+                      <Col xs={{ span: 18 }} lg={{ span:4,offset:0 }} style={{float:"right"}}>
                       <div
                         style={{
                           borderRadius: 50,
-                          padding: 24,
+                          padding: 14,
                           background: "#fff",
-                          minHeight: 60,
-                          textAlign: "right"
+                          minHeight: 30,
+                          textAlign: "left"
                         }}
                         key={index}
                       >
-                        <b>Aditya:</b> {message.slice(1, message.length)}
+                        <b style={{fontSize:12, color:"#438EF7"}}>Aditya<br/></b> {message.slice(1, message.length)}
                       </div>
+                      </Col>
+                      </Row>
                       <br />
                     </div>
                   );
